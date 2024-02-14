@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #game-container {
+      position: relative;
+      width: 800px;
+      height: 600px;
+      margin: auto;
+      background-color: #fff; /* White plane background */
+      overflow: hidden;
+    }
+
+    #bird {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: #FFD700; /* Yellow bird color */
+      bottom: 50%;
+      left: 50px;
+      transition: bottom 0.2s ease-out, left 0.2s ease-out;
+    }
+
+    .pipe {
+      position: absolute;
+      width: 100px;
+      height: 300px;
+      background-color: #008000; /* Green pipe color */
+      bottom: 0;
+      transition: left 3s linear;
+    }
+  </style>
+  <title>Flappy Bird</title>
+</head>
+<body>
+
+<div id="game-container">
+  <div id="bird"></div>
+</div>
+
+<script>
+  const bird = document.getElementById('bird');
+  const gameContainer = document.getElementById('game-container');
+
+  let birdBottom = 50;
+  let birdLeft = 50;
+
+  document.addEventListener('keydown', moveBird);
+
+  function moveBird(event) {
+    const birdSpeed = 10;
+
+    switch (event.key) {
+      case 'ArrowUp':
+        birdBottom += birdSpeed;
+        bird.style.bottom = birdBottom + 'px';
+        break;
+      case 'ArrowDown':
+        birdBottom -= birdSpeed;
+        bird.style.bottom = birdBottom + 'px';
+        break;
+      case 'ArrowLeft':
+        birdLeft -= birdSpeed;
+        bird.style.left = birdLeft + 'px';
+        break;
+      case 'ArrowRight':
+        birdLeft += birdSpeed;
+        bird.style.left = birdLeft + 'px';
+        break;
+    }
+  }
+
+  function update() {
+    const pipes = document.querySelectorAll('.pipe');
+    pipes.forEach(pipe => {
+      const pipeLeft = parseInt(window.getComputedStyle(pipe).left);
+      if (pipeLeft <= 0) {
+        pipe.style.left = '100%';
+      }
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  setInterval(() => {
+    const pipe1 = document.createElement('div');
+    pipe1.classList.add('pipe');
+    pipe1.style.left = '100%';
+    gameContainer.appendChild(pipe1);
+
+    const pipe2 = document.createElement('div');
+    pipe2.classList.add('pipe');
+    pipe2.style.left = '150%';
+    gameContainer.appendChild(pipe2);
+  }, 2000);
+
+  update();
+</script>
+
+</body>
+</html>
